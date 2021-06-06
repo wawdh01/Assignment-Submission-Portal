@@ -32,20 +32,20 @@ router.post('/createcoursepost', auth, async(req, res)=>{
     res.redirect('/course/mycourses');
 })
 
-router.get('/:id', async (req, res)=>{
+router.get('/:id', auth, async (req, res)=>{
     const {id} = req.params;
     const course = await Course.findById(id);
     console.log(course);
     res.render('singleCourse', {course});
 })
 
-router.get('/createassignment/:id', async(req, res)=>{
+router.get('/createassignment/:id',auth, async(req, res)=>{
     const {id} = req.params;
     const course = await Course.findById(id);
     res.render('createAssignment', {course});
 })
 
-router.post('/createassignmentpost/:id', async(req, res)=>{
+router.post('/createassignmentpost/:id', auth, async(req, res)=>{
     const {id} = req.params;
     const token = req.cookies.token;
     if (!token) {
