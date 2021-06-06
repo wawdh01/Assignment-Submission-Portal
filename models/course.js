@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const studentSchema = mongoose.Schema({
     studentName: {type: String, required: true},
-    grade: {type: Number, required: true}
+    grade: {type: Number, required: true, default: 0},
+    drive_link: {type: String}
 })
 
 const assignmentSchema = mongoose.Schema({

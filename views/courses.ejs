@@ -8,15 +8,21 @@
 <body>
     <table border="1">
         <tr>
+            <th>Id</th>
             <th>Course Name</th>
             <th>Standard</th>
             <th>Created By</th>
+            <th>Check Assignment</th>
+            <th>Add Assignment</th>
         </tr>
         <% for (let course of courses) { %>
             <tr>
+                <td><%= course._id %></td>
                 <td><%= course.course_name %></td>
                 <td><%= course.standard %></td>
                 <td><%= course.createdBy %></td>
+                <td><a href="/course/<%= course._id %>">Click Here</a></td>
+                <td><a href="/course/createassignment/<%= course._id %>">Add Assignment</a></td>
             </tr>
         <% } %>
     </table>

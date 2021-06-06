@@ -32,5 +32,47 @@ router.post('/createcoursepost', auth, async(req, res)=>{
     res.redirect('/course/mycourses');
 })
 
+router.get('/:id', async (req, res)=>{
+    const {id} = req.params;
+    const course = await Course.findById(id);
+    console.log(course);
+    res.render('singleCourse', {course});
+})
+
+router.get('/createassignment/:id', async(req, res)=>{
+    const {id} = req.params;
+    const course = await Course.findById(id);
+    res.render('createAssignment', {course});
+})
+
+router.post('/createassignmentpost/:id', async(req, res)=>{
+    const {id} = req.params;
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(401).json({errorMessage:"Unauthorized"});
+    }
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    const _id = verified.user;
+    const existingUser = await User.findOne({_id});
+    const postedBy = existingUser.name;
+    const {title, description, total_grade} = req.body;
+    const assignmentBody = {
+        title,
+        description,
+        total_grade,
+        postedBy
+    }
+    const course = await Course.findByIdAndUpdate(
+        {_id: id},
+        {$addToSet:{assignments: assignmentBody}},
+        function (err, result) {
+            if (err) {
+                res.send(err);
+            }
+        }
+    );
+    res.redirect('/course/' + course._id);
+})
+
 
 module.exports = router;
